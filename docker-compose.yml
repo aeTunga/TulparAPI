@@ -1,0 +1,30 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tulpar-api:latest
+    container_name: tulpar_api
+    restart: always
+    ports:
+      # Bind to localhost ONLY (security requirement)
+      - "127.0.0.1:3000:3000"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=sqlite:/app/data/data.db
+      - STORAGE_PATH=/app/storage
+      - RUST_LOG=info
+      - HOST=0.0.0.0
+      - PORT=3000
+    volumes:
+      # :Z flag is critical for Podman SELinux support
+      # Map the data and storage directories
+      - ./data:/app/data:Z
+      - ./storage:/app/storage:Z
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: 512M
