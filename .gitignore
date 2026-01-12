@@ -1,0 +1,6 @@
+/target
+**/.DS_Store
+*.db
+*.db-shm
+*.db-wal
+/storage/collections/*.lz4
